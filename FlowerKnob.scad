@@ -1,9 +1,25 @@
+
+// Height of the knob
+height = 8; // [4:30]
+
+// Approximate diameter of the knob
+diameter = 30; // [15:60]
+
+// Number of petals of the knob
+numberOfPetals = 6; // [3:10]
+
+// Radius of the corner rounding
+roundingRadius = 2; // [0:10]
+
+$fn = 40;
+
+flowerKnob(height, diameter, numberOfPetals, roundingRadius);
    
-module knob(height, diameter, numberOfArms = 6, roundingRadius = 2) {
+module flowerKnob(height, diameter, numberOfPetals = 6, roundingRadius = 2) {
     
-    ff = 0.001; //fudge factorZ
+    ff = 0.01; //fudge factor
     
-    chordAngle = 180 / numberOfArms;
+    chordAngle = 180 / numberOfPetals;
     halfChord = sin(chordAngle / 2) * diameter / 2;
     chordDistance = pow(diameter * diameter / 4 - halfChord * halfChord, 1/2);
 
@@ -79,7 +95,7 @@ module knob(height, diameter, numberOfArms = 6, roundingRadius = 2) {
         difference() {
             cylinder(height, r=chordDistance);
             
-            for (i=[1:numberOfArms])
+            for (i=[1:numberOfPetals])
                 rotate([0, 0, chordAngle * 2 * (i + 0.5)])
                     translate([chordDistance+petalDistance, 0, -1])
                         cylinder(height+2, r=(petalRadius+roundingRadius)*1.01);
@@ -88,21 +104,18 @@ module knob(height, diameter, numberOfArms = 6, roundingRadius = 2) {
     
     difference() {
     union() { 
-        cylinder(height,r=chordDistance+petalDistance, $fn = numberOfArms*2);
+        cylinder(height,r=chordDistance+petalDistance, $fn = numberOfPetals*2);
         
-        for (i=[1:numberOfArms])
+        for (i=[1:numberOfPetals])
             rotate([0, 0, chordAngle * 2 * i])
                 translate([chordDistance+petalDistance, 0, 0])
                     bump();
     }
-        for (i=[1:numberOfArms])
+        for (i=[1:numberOfPetals])
             rotate([0, 0, chordAngle * 2 * (i + 0.5)])
                 translate([chordDistance+petalDistance, 0, 0])
                     dent();
         
-        
-  
-        //filling();
         
         
      }
